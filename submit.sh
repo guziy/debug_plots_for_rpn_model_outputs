@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 
+# read your RAPid
 . ${HOME}/.CLUMEQ_accnt
 
 cat << EOS | qsub -
