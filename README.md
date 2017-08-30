@@ -6,4 +6,7 @@ These scripts are intended to be submitted to a server batch manager (PBS) as fo
 ./submit.sh script_path.py 
 ```
 
-Note: this one is used on guillimin, assuming you have a valid account number.
+Note: this one is used on guillimin, assuming you have a valid account number in `${HOME}/.CLUMEQ_accnt` assigned as 
+```bash
+RAPid="the id value"
+```
