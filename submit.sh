@@ -5,7 +5,7 @@
 . ${HOME}/.CLUMEQ_accnt
 
 cat << EOS | qsub -
-#PBS -l nodes=1:ppn=12
+#PBS -l procs=1
 #PBS -o \${PBS_JOBNAME}\${PBS_JOBID}.out
 #PBS -e \${PBS_JOBNAME}\${PBS_JOBID}.err
 #PBS -V
