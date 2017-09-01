@@ -61,8 +61,17 @@ def main():
 
     p = Path(samples_path)
 
+    img_dir = Path(p.parent.name)
+    if not img_dir.exists():
+        img_dir.mkdir()
+
+    selected_data = img_dir / "selected_data"
+
+    if not selected_data.exists():
+        selected_data.mkdir()
+
     prefix = "pm"
-    vname = "DN"
+    vname = "I5"
     indices = (137, 85)
 
     all_parts = []
@@ -70,16 +79,29 @@ def main():
         if mdir.is_dir():
             parts = process_month(mdir, prefix=prefix, indices=indices, vname=vname)
             all_parts.extend(parts)
+        break
 
     ts = pd.concat(all_parts)
     assert isinstance(ts, pd.Series)
+
+
+    # save the values for possible further analysis
+    selected_data = selected_data / "{}_{}.nc".format(vname, "_".join([str(i) for i in indices]))
+    ts.to_xarray().to_netcdf(str(selected_data))
+
+
+    if True:
+        raise Exception
 
     # save the figure
     fig = plt.figure()
 
     ax = ts.plot()
 
-    fig.savefig("{}_{}.png".format(vname, "_".join([str(i) for i in indices])))
+    ax.set_title(vname)
+
+    img_file = img_dir / "{}_{}.png".format(vname, "_".join([str(i) for i in indices]))
+    fig.savefig(str(img_file), bbox_inches="tigh", dpi=400)
 
 
     pass
