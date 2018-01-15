@@ -9,6 +9,7 @@ import pandas as pd
 from rpn.rpn import RPN
 import matplotlib.pyplot as plt
 from rpn.variable import RPNVariable
+import argparse
 
 
 def process_month(mdir:Path, prefix="pm", indices=None, vname="DN") -> list:
@@ -56,8 +57,27 @@ def process_month(mdir:Path, prefix="pm", indices=None, vname="DN") -> list:
 
 def main():
 
-    samples_path = "/sf1/escer/sushama/huziy/Output/NEI/NEI_WC0.11deg_Crr1/Samples"
+    # defaults
+    prefix = "pm"
+    vname = "I5"
+    indices = (137, 85)
 
+    # parse command line arguments if present
+    argparser = argparse.ArgumentParser(description="Plot timeseries from raw model output")
+    argparser.add_argument("--varname", nargs="?", default=vname)
+    argparser.add_argument("--level_index", nargs="?", default=0, type=int, help="level index in the sorted list")
+    args = argparser.parse_args()
+
+    if len(indices) == 2:
+        indices = indices + (args.level_index, )
+    elif len(indices) == 3:
+        indices = list(indices)
+        indices[-1] = args.level_index
+
+    print("indices={}; varname={}".format(indices, args.varname))
+
+
+    samples_path = "/sf1/escer/sushama/huziy/Output/NEI/NEI_WC0.11deg_Crr1/Samples"
 
     p = Path(samples_path)
 
@@ -70,41 +90,32 @@ def main():
     if not selected_data.exists():
         selected_data.mkdir()
 
-    prefix = "pm"
-    vname = "I5"
-    indices = (137, 85)
 
     all_parts = []
     for mdir in p.iterdir():
         if mdir.is_dir():
-            parts = process_month(mdir, prefix=prefix, indices=indices, vname=vname)
+            parts = process_month(mdir, prefix=prefix, indices=indices, vname=args.varname)
             all_parts.extend(parts)
-        break
 
     ts = pd.concat(all_parts)
     assert isinstance(ts, pd.Series)
 
 
     # save the values for possible further analysis
-    selected_data = selected_data / "{}_{}.nc".format(vname, "_".join([str(i) for i in indices]))
+    selected_data = selected_data / "{}_{}.nc".format(args.varname, "_".join([str(i) for i in indices]))
     ts.to_xarray().to_netcdf(str(selected_data))
 
-
-    if True:
-        raise Exception
 
     # save the figure
     fig = plt.figure()
 
     ax = ts.plot()
 
-    ax.set_title(vname)
+    ax.set_title(args.varname)
 
-    img_file = img_dir / "{}_{}.png".format(vname, "_".join([str(i) for i in indices]))
-    fig.savefig(str(img_file), bbox_inches="tigh", dpi=400)
+    img_file = img_dir / "{}_{}.png".format(args.varname, "_".join([str(i) for i in indices]))
+    fig.savefig(str(img_file), bbox_inches="tight", dpi=400)
 
-
-    pass
 
 
 
