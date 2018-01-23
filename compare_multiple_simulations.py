@@ -51,7 +51,7 @@ def plot_diags(mean_field, area_avg_series, samples_dir_path: Path, label="", va
 
 
 def main():
-    global BASEMAP
+    global BASEMAP, LAND_MASK
     simlabel_to_path = OrderedDict([
         ("NA044_pgi11code_pgicompiled(initial)", "/home/huziy/current_project/Output/test_compilers/NorthAmerica_0.44deg_testPGI_before_gfrefactorings/Samples"),
         ("NA044_pgi11+gfortrancode_pgicompiled", "/home/huziy/current_project/Output/test_compilers/NorthAmerica_0.44deg_testPGI/Samples")
@@ -65,7 +65,8 @@ def main():
         path = Path(path)
 
         # Calculate the required diagnostics
-        mean_field, area_avg_series = diagnose_var(varname=varname, fname_prefix=filename_prefix, months_list=months_of_interest)
+        mean_field, area_avg_series = diagnose_var(varname=varname, fname_prefix=filename_prefix,
+                                                   months_list=months_of_interest, samples_folder_path=path)
 
         # do the plotting
         plot_diags(mean_field, area_avg_series, samples_dir_path=path, label=label, varname=varname)
