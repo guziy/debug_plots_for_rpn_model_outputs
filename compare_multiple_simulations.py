@@ -48,7 +48,7 @@ def plot_diags(mean_field, area_avg_series, samples_dir_path: Path, label="", va
     ax = fig.add_subplot(gs[0, 1])
     xx, yy = BASEMAP(LONS, LATS)
     
-    clevs = vname_to_clevs[varname]
+    clevs = vname_to_clevels[varname]
     norm = BoundaryNorm(clevs, len(clevs) - 1) 
     cmap = cm.get_cmap("bwr", len(clevs) - 1)
     im = BASEMAP.contourf(xx, yy, mean_field, levels=clevs, norm=norm, cmap=cmap, ax=ax, extend="both")
