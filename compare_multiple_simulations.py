@@ -93,8 +93,12 @@ def main(simlabel_to_path=None, varname="TT"):
         "TT": ["C", 1],
     }
 
+    fname_prefix_db = {
+        "PR": "pm", "TT": "dm"
+    }
 
-    filename_prefix = "dm"
+
+    filename_prefix = fname_prefix_db[varname]
     months_of_interest = [1, 2, ]  # only for the 2d map
     units, multiplier = units_db[varname]
     
