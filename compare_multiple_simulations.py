@@ -21,6 +21,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.colors import BoundaryNorm
+from matplotlib import cm
+
 
 LAND_MASK = None
 BASEMAP = None
@@ -72,18 +74,19 @@ def plot_diags(mean_field, area_avg_series, samples_dir_path: Path, label="", va
     fig.savefig(str(img_file), bbox_inches="tight", dpi=150)
 
 
-def main():
+def main(simlabel_to_path=None, varname="TT"):
     global BASEMAP, LAND_MASK
-    simlabel_to_path = OrderedDict([
-        ("NA044_pgi11code_pgicompiled(initial)",
-         "/home/huziy/current_project/Output/test_compilers/NorthAmerica_0.44deg_testPGI_before_gfrefactorings/Samples"),
-        ("NA044_pgi11+gfortrancode_pgicompiled",
-         "/home/huziy/current_project/Output/test_compilers/NorthAmerica_0.44deg_testPGI/Samples"),
-        ("NorthAmerica_0.44deg_testgfortran_cedar",
-         "/home/huziy/current_project/Output/test_compilers/NorthAmerica_0.44deg_testgfortran_cedar/Samples")
-    ])
 
-    varname = "TT"
+    if simlabel_to_path is None:
+        simlabel_to_path = OrderedDict([
+            ("NA044_pgi11code_pgicompiled(initial)",
+             "/home/huziy/current_project/Output/test_compilers/NorthAmerica_0.44deg_testPGI_before_gfrefactorings/Samples"),
+            ("NA044_pgi11+gfortrancode_pgicompiled",
+             "/home/huziy/current_project/Output/test_compilers/NorthAmerica_0.44deg_testPGI/Samples"),
+            ("NorthAmerica_0.44deg_testgfortran_cedar",
+             "/home/huziy/current_project/Output/test_compilers/NorthAmerica_0.44deg_testgfortran_cedar/Samples")
+        ])
+
 
     units_db = {
         "PR": ["mm/day", 1000 * 24 * 3600],
@@ -92,7 +95,7 @@ def main():
 
 
     filename_prefix = "dm"
-    months_of_interest = [1, 2, 12]  # only for the 2d map
+    months_of_interest = [1, 2, ]  # only for the 2d map
     units, multiplier = units_db[varname]
     
 
@@ -200,5 +203,22 @@ def process_month(varname="PR", fname_prefix="pm", months_list=None, month_folde
         datetime(year, month, 15): np.asarray([field[LAND_MASK].mean() for field in fields]).mean()}
 
 
+
+# for science migration
+def science_migration_entry():
+    simlabel_to_path = OrderedDict([
+        ("Guillimin",
+         "/gs/project/ugh-612-aa/huziy/Output/v_4.8.12/Output/EUSA/EUSA_0.22_ERA_CLASS26LwithTEB_MODIFIED_GEOPHYS_updated_by_Luis/Samples"),
+        ("Science",
+         "/gs/project/ugh-612-aa/huziy/Output/v_4.8.12/Output/EUSA/EUSA_0.22_ERA_CLASS26LwithTEB_MODIFIED_GEOPHYS_updated_by_Luis_ECCC/Samples"),
+    ])
+
+    var_list = ["TT", "PR"]
+    for v in var_list:
+        main(simlabel_to_path=simlabel_to_path, varname=v)
+
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    science_migration_entry()
