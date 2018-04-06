@@ -212,9 +212,9 @@ def process_month(varname="PR", fname_prefix="pm", months_list=None, month_folde
 def science_migration_entry():
     simlabel_to_path = OrderedDict([
         ("Guillimin",
-         "/gs/project/ugh-612-aa/huziy/Output/v_4.8.12/Output/EUSA/EUSA_0.22_ERA_CLASS26LwithTEB_MODIFIED_GEOPHYS_updated_by_Luis/Samples"),
+         "/gs/project/ugh-612-aa/huziy/Output/v_4.8.12/Output/EUSA/EUSA_0.22_ERA_CLASS26LwithTEB_MODIFIED_GEOPHYS_updated_by_Luis_subset/Samples"),
         ("Science",
-         "/gs/project/ugh-612-aa/huziy/Output/v_4.8.12/Output/EUSA/EUSA_0.22_ERA_CLASS26LwithTEB_MODIFIED_GEOPHYS_updated_by_Luis_ECCC/Samples"),
+         "/gs/project/ugh-612-aa/huziy/Output/v_4.8.12/Output/EUSA/EUSA_0.22_ERA_CLASS26LwithTEB_MODIFIED_GEOPHYS_updated_by_Luis_ECCC_subset/Samples"),
     ])
 
     var_list = ["TT", "PR"]
